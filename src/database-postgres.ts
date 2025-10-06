@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import sql from "./db";
+import sql from "./db.js";
 
 // Types
 import type { VideoType } from "./interfaces/DatabaseTypes";

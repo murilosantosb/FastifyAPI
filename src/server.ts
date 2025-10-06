@@ -1,5 +1,5 @@
 import { fastify } from "fastify";
-import { DatabasePostgres } from "./database-postgres";
+import { DatabasePostgres } from "./database-postgres.js";
 import type { VideoType } from "./interfaces/DatabaseTypes";
 
 const server = fastify();
