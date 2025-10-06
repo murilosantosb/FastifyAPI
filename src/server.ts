@@ -1,13 +1,13 @@
 import { fastify } from "fastify";
-import { DatabaseMemory } from "./database-memory";
+import { DatabasePostgres } from "./database-postgres";
 import type { VideoType } from "./interfaces/DatabaseTypes";
 
 const server = fastify();
 
-const database = new DatabaseMemory();
+const database = new DatabasePostgres();
 
-server.post("/videos", (req, res) => {
-    const { title, description, duration } = req.body as VideoType;
+server.post("/videos", async (req, res) => {
+    const { title, description, duration} = req.body as VideoType;
 
     database.create({
         title,
@@ -18,17 +18,19 @@ server.post("/videos", (req, res) => {
     return res.status(201).send();
 });
 
-server.get("/videos", (req, res) => {
-    const videos = database.list();
+server.get("/videos", async (req, res) => {
+    const { search } = req.query as { search: string };
+
+    const videos = await database.list(search);
 
     return videos;
 })
 
-server.put("/videos/:id", (req, res) => {
+server.put("/videos/:id", async (req, res) => {
     const { id: videoId } = req.params as {id: string};
     const { title, description, duration } = req.body as VideoType;
 
-    database.update(videoId, {
+   await database.update(videoId, {
         title,
         description,
         duration,
@@ -37,10 +39,10 @@ server.put("/videos/:id", (req, res) => {
     return res.status(204).send();
 })
 
-server.delete("/videos/:id", (req, res) => {
+server.delete("/videos/:id", async (req, res) => {
     const { id: videoId } = req.params as { id: string };
     
-    database.delete(videoId);
+    await database.delete(videoId);
 
     return res.send("Vídeo excluído com sucesso!");
 })
@@ -48,4 +50,4 @@ server.delete("/videos/:id", (req, res) => {
 
 server.listen({
     port: 3333
-})
+});
