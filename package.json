@@ -5,9 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "dev": "tsx watch src/server.ts",
-    "start": "node --watch dist/server.js",
-    "build": "tsc"
+    "start": "npm run build && node dist/server.js"
   },
   "keywords": [],
   "author": "",
